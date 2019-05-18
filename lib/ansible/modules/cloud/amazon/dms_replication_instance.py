@@ -162,10 +162,6 @@ def main():
         dnsnameservers=dict(),
         tags=dict(type='list'),
 
-
-
-
-
     )
     global module
     module = AnsibleAWSModule(
@@ -184,7 +180,8 @@ def main():
     replication_instance = describe_instance(dmsclient,
                                              module.params.get('identifier'))
     if state == 'present':
-        module.exit_json(changed=changed, msg=argument_spec)
+        if instance_exists(replication_instance):
+            module.exit_json(changed=changed, msg=argument_spec)
     module.exit_json(changed=changed, msg=exit_message)
 
 if __name__ == '__main__':
